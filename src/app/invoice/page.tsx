@@ -1,23 +1,38 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useCart } from '@/context/CartContext';
+
+interface Course {
+  title: string;
+  price: number;
+}
 
 export default function InvoicePage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { cart } = useCart();
-
   const paymentId = searchParams.get('payment_id');
   const amount = Number(searchParams.get('amount')) / 100;
 
   const [date, setDate] = useState('');
+  const [purchasedCourses, setPurchasedCourses] = useState<Course[]>([]);
 
   useEffect(() => {
     setDate(new Date().toLocaleString());
-    // clear cart for next session
-    localStorage.removeItem('cart');
+
+    const cartData = localStorage.getItem('cart');
+    if (cartData) {
+      try {
+        const parsed = JSON.parse(cartData);
+        setPurchasedCourses(parsed);
+      } catch (err) {
+        console.error('Error parsing cart:', err);
+      }
+    }
+
+    localStorage.removeItem('cart'); // clear cart after invoice
   }, []);
 
   return (
@@ -36,8 +51,8 @@ export default function InvoicePage() {
         <div>
           <h2 className="text-gray-600 text-lg font-semibold mb-2">Purchased Courses:</h2>
           <ul className="text-gray-600 space-y-2">
-            {cart.map((course, index) => (
-              <li key={index} className="text-gray-600 border-b pb-2">
+            {purchasedCourses.map((course, index) => (
+              <li key={index} className="border-b pb-2">
                 {course.title} - ₹{course.price}
               </li>
             ))}
@@ -46,7 +61,7 @@ export default function InvoicePage() {
 
         <hr className="text-gray-600 my-4" />
 
-        <div className="text-gray-600 text-right font-bold text-lg">
+        <div className="text-gray-700 text-right font-bold text-lg">
           Total Paid: ₹{amount}
         </div>
         <button onClick={() => window.print()} className="text-sm text-blue-500 underline mt-2">Print Invoice</button>
