@@ -5,6 +5,43 @@ import { useRouter } from 'next/navigation';
 import Script from 'next/script';
 import { useState } from 'react';
 
+// Razorpay types
+interface RazorpayResponse {
+    razorpay_payment_id: string;
+    razorpay_order_id: string;
+    razorpay_signature: string;
+}
+
+interface RazorpayOptions {
+    key: string;
+    amount: number;
+    currency: string;
+    name: string;
+    description: string;
+    order_id: string;
+    handler: (response: RazorpayResponse) => void;
+    prefill: {
+        name: string;
+        email: string;
+        contact: string;
+    };
+    theme: {
+        color: string;
+    };
+}
+
+interface RazorpayInstance {
+    open(): void;
+}
+
+interface RazorpayConstructor {
+    new(options: RazorpayOptions): RazorpayInstance;
+}
+
+interface RazorpayWindow extends Window {
+    Razorpay: RazorpayConstructor;
+}
+
 export default function CheckoutPage() {
     const { cart } = useCart();
     const router = useRouter();
@@ -28,14 +65,14 @@ export default function CheckoutPage() {
 
             const order = await res.json();
 
-            const options = {
+            const options: RazorpayOptions = {
                 key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
                 amount: order.amount,
                 currency: 'INR',
                 name: 'E-Learnify',
                 description: 'Course Purchase',
                 order_id: order.id,
-                handler: function (response: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) {
+                handler: function (response: RazorpayResponse) {
                     const query = new URLSearchParams({
                         payment_id: response.razorpay_payment_id,
                         amount: (order.amount / 100).toString(),
@@ -50,7 +87,7 @@ export default function CheckoutPage() {
                 theme: { color: '#6366F1' },
             };
 
-            const rzp = new (window as unknown as { Razorpay: new (options: any) => any }).Razorpay(options);
+            const rzp = new ((window as unknown) as RazorpayWindow).Razorpay(options);
             rzp.open();
         } catch (err) {
             console.error('Order error:', err);
@@ -66,7 +103,6 @@ export default function CheckoutPage() {
             <main className="min-h-screen p-8 bg-gray-100 flex justify-center">
                 <div className="bg-white p-6 rounded shadow w-full max-w-lg">
                     <h2 className="text-gray-800 text-xl font-bold mb-4">Checkout</h2>
-
                     {cart.length === 0 ? (
                         <p className="text-gray-500">Your cart is empty.</p>
                     ) : (
