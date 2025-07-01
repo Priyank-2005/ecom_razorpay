@@ -3,14 +3,14 @@
 export const dynamic = 'force-dynamic';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 
 interface Course {
   title: string;
   price: number;
 }
 
-export default function InvoicePage() {
+function InvoiceContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const paymentId = searchParams.get('payment_id');
@@ -32,7 +32,7 @@ export default function InvoicePage() {
       }
     }
 
-    localStorage.removeItem('cart'); // clear cart after invoice
+    localStorage.removeItem('cart');
   }, []);
 
   return (
@@ -76,5 +76,13 @@ export default function InvoicePage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function InvoicePage() {
+  return (
+    <Suspense fallback={<div className="p-6 text-center">Loading invoice...</div>}>
+      <InvoiceContent />
+    </Suspense>
   );
 }
