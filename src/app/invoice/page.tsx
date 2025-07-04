@@ -20,20 +20,30 @@ function InvoiceContent() {
   const [purchasedCourses, setPurchasedCourses] = useState<Course[]>([]);
 
   useEffect(() => {
-    setDate(new Date().toLocaleString());
+  setDate(new Date().toLocaleString());
 
-    const cartData = localStorage.getItem('cart');
-    if (cartData) {
-      try {
-        const parsed = JSON.parse(cartData);
-        setPurchasedCourses(parsed);
-      } catch (err) {
-        console.error('Error parsing cart:', err);
-      }
+  const cartData = localStorage.getItem('cart');
+  if (cartData) {
+    try {
+      const parsed = JSON.parse(cartData);
+      setPurchasedCourses(parsed);
+
+      const newOrder = {
+        product: parsed.map((p: any) => p.title).join(', '),
+        price: parsed.reduce((sum: number, item: any) => sum + item.price, 0),
+        date: new Date().toISOString(),
+        orderId: paymentId || 'unknown',
+      };
+
+      const prevOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+      localStorage.setItem('orders', JSON.stringify([...prevOrders, newOrder]));
+    } catch (err) {
+      console.error('Error parsing cart/orders:', err);
     }
+  }
 
-    localStorage.removeItem('cart');
-  }, []);
+  localStorage.removeItem('cart');
+}, []);
 
   return (
     <main className="min-h-screen flex justify-center bg-gray-100 p-6">

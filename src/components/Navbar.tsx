@@ -1,26 +1,37 @@
 'use client';
-import { useCart } from '@/context/CartContext';
-import { FiShoppingCart } from 'react-icons/fi';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/orders', label: 'Orders' },
+  { href: '/cart', label: 'Cart' },
+];
 
 export default function Navbar() {
-  const { cart } = useCart();
+  const pathname = usePathname();
 
   return (
-    <nav className="bg-white shadow px-6 py-4 flex justify-between items-center">
-      <Link href="/" className="text-xl font-bold text-gray-800">
-        E-Learnify
-      </Link>
-
-      <div className="flex items-center space-x-6">
-        <Link href="/cart" className="relative">
-          <FiShoppingCart size={24} className="text-gray-700" />
-          {cart.length > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-              {cart.length}
-            </span>
-          )}
+    <nav className="bg-white shadow-md p-4 sticky top-0 z-50">
+      <div className="max-w-6xl mx-auto flex justify-between items-center">
+        <Link href="/" className="text-xl font-bold text-blue-700">
+          ShopMate
         </Link>
+        <div className="space-x-4">
+          {links.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              className={`px-4 py-2 rounded-lg ${
+                pathname === href
+                  ? 'bg-blue-100 text-blue-700 font-semibold'
+                  : 'text-gray-700 hover:text-blue-700'
+              }`}
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
       </div>
     </nav>
   );

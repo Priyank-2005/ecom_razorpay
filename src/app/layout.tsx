@@ -1,20 +1,16 @@
-import './globals.css';
+import type { ReactNode } from 'react';
 import { CartProvider } from '@/context/CartContext';
-import Navbar from '@/components/Navbar';
+import "./globals.css";
 
-export const metadata = {
-  title: 'E-Learnify',
-  description: 'Simple course site',
-};
+interface RootLayoutProps {
+  children: ReactNode;
+}
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body>
-        <CartProvider>
-          <Navbar />
-          {children}
-        </CartProvider>
+        <CartProvider>{children}</CartProvider>
       </body>
     </html>
   );
