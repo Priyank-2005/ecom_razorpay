@@ -5,9 +5,13 @@ export const dynamic = 'force-dynamic';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
 
-interface Course {
+interface Product {
+  id: string;
   title: string;
   price: number;
+  description: string;
+  image: string;
+  quantity: number;
 }
 
 function InvoiceContent() {
@@ -17,33 +21,33 @@ function InvoiceContent() {
   const amount = Number(searchParams.get('amount')) / 100;
 
   const [date, setDate] = useState('');
-  const [purchasedCourses, setPurchasedCourses] = useState<Course[]>([]);
+  const [purchasedProducts, setPurchasedProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-  setDate(new Date().toLocaleString());
+    setDate(new Date().toLocaleString());
 
-  const cartData = localStorage.getItem('cart');
-  if (cartData) {
-    try {
-      const parsed = JSON.parse(cartData);
-      setPurchasedCourses(parsed);
+    const cartData = localStorage.getItem('cart');
+    if (cartData) {
+      try {
+        const parsed: Product[] = JSON.parse(cartData);
+        setPurchasedProducts(parsed);
 
-      const newOrder = {
-        product: parsed.map((p: any) => p.title).join(', '),
-        price: parsed.reduce((sum: number, item: any) => sum + item.price, 0),
-        date: new Date().toISOString(),
-        orderId: paymentId || 'unknown',
-      };
+        const newOrder = {
+          product: parsed.map((p) => `${p.title} x${p.quantity}`).join(', '),
+          price: parsed.reduce((sum, item) => sum + item.price * item.quantity, 0),
+          date: new Date().toISOString(),
+          orderId: paymentId || 'unknown',
+        };
 
-      const prevOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-      localStorage.setItem('orders', JSON.stringify([...prevOrders, newOrder]));
-    } catch (err) {
-      console.error('Error parsing cart/orders:', err);
+        const prevOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+        localStorage.setItem('orders', JSON.stringify([...prevOrders, newOrder]));
+      } catch (err) {
+        console.error('Error parsing cart/orders:', err);
+      }
     }
-  }
 
-  localStorage.removeItem('cart');
-}, []);
+    localStorage.removeItem('cart');
+  }, [paymentId]);
 
   return (
     <main className="min-h-screen flex justify-center bg-gray-100 p-6">
@@ -59,11 +63,11 @@ function InvoiceContent() {
         <hr className="text-gray-600 my-4" />
 
         <div>
-          <h2 className="text-gray-600 text-lg font-semibold mb-2">Purchased Courses:</h2>
+          <h2 className="text-gray-600 text-lg font-semibold mb-2">Purchased Products:</h2>
           <ul className="text-gray-600 space-y-2">
-            {purchasedCourses.map((course, index) => (
+            {purchasedProducts.map((product, index) => (
               <li key={index} className="border-b pb-2">
-                {course.title} - ₹{course.price}
+                {product.title} x{product.quantity} – ₹{product.price * product.quantity}
               </li>
             ))}
           </ul>
