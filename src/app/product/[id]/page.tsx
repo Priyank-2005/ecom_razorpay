@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
+import { notFound } from 'next/navigation';
 
 const products = [
   {
@@ -144,17 +145,10 @@ const products = [
   }
 ];
 
-
-interface Props {
-  params: { id: string };
-}
-
-export default async function ProductDetail({ params }: Props) {
+export default function ProductDetail({ params }: { params: { id: string } }) {
   const product = products.find((p) => p.id === params.id);
 
-  if (!product) {
-    return <div className="p-10 text-center">Product not found.</div>;
-  }
+  if (!product) return notFound(); // better than manual error message
 
   return (
     <>
