@@ -38,10 +38,6 @@ interface RazorpayConstructor {
     new(options: RazorpayOptions): RazorpayInstance;
 }
 
-interface RazorpayWindow extends Window {
-    Razorpay: RazorpayConstructor;
-}
-
 export default function CheckoutPage() {
     const { cart } = useCart();
     const router = useRouter();
@@ -87,13 +83,14 @@ export default function CheckoutPage() {
                 theme: { color: '#6366F1' },
             };
 
-            if (typeof window !== 'undefined' && (window as any).Razorpay) {
-                const rzp = new (window as any).Razorpay(options);
+            const RazorpayConstructor = (window as unknown as { Razorpay: RazorpayConstructor }).Razorpay;
+
+            if (RazorpayConstructor) {
+                const rzp = new RazorpayConstructor(options);
                 rzp.open();
             } else {
                 alert('Payment SDK failed to load. Please refresh and try again.');
             }
-
         } catch (err) {
             console.error('Order error:', err);
             alert('Failed to create order. Please try again.');
