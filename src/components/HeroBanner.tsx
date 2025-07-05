@@ -23,37 +23,38 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="w-full overflow-hidden bg-white shadow-sm">
-      <div className="relative w-full h-[400px]">
-        {ads.map((ad, i) => (
-          <div
-            key={ad.id}
-            className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ${
-              i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
-            }`}
-          >
-            <Image
-              src={ad.image}
-              alt={ad.alt}
-              fill
-              priority
-              className="object-cover"
-            />
-          </div>
-        ))}
-      </div>
-
-      {/* Dots */}
-      <div className="flex justify-center gap-2 mt-3">
-        {ads.map((_, i) => (
-          <div
-            key={i}
-            className={`h-2 w-2 rounded-full transition ${
-              i === current ? 'bg-blue-600 scale-110' : 'bg-gray-300'
-            }`}
+  <section className="w-full overflow-hidden bg-white shadow-sm">
+    {/* Slider Container with responsive height */}
+    <div className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px]">
+      {ads.map((ad, i) => (
+        <div
+          key={ad.id}
+          className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ${
+            i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
+          }`}
+        >
+          <Image
+            src={ad.image}
+            alt={ad.alt}
+            fill
+            priority
+            className="object-cover"
           />
-        ))}
-      </div>
-    </section>
-  );
+        </div>
+      ))}
+    </div>
+
+    {/* Dots */}
+    <div className="flex justify-center gap-2 mt-3">
+      {ads.map((_, i) => (
+        <div
+          key={i}
+          className={`h-2 w-2 rounded-full transition ${
+            i === current ? 'bg-blue-600 scale-110' : 'bg-gray-300'
+          }`}
+        />
+      ))}
+    </div>
+  </section>
+);
 }

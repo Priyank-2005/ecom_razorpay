@@ -19,28 +19,33 @@ export default function CategorySlider() {
   };
 
   return (
-    <div className="w-300 px-4">
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 w-full">
-        {categories.map((cat, i) => (
-          <div
-            key={i}
-            className="bg-white w-full border rounded-xl shadow-md flex flex-col items-center p-4 hover:shadow-lg transition"
+  <div className="w-full px-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      {categories.map((cat, i) => (
+        <div
+          key={i}
+          className="bg-white w-full border rounded-xl shadow-md flex flex-col items-center p-4 hover:shadow-lg transition"
+        >
+          <Image
+            width={200}
+            height={150}
+            src={cat.image}
+            alt={cat.name}
+            className="w-full max-h-40 object-contain mb-4"
+          />
+          <h3 className="text-lg font-semibold text-gray-700 mb-2 text-center">
+            {cat.name}
+          </h3>
+          <button
+            onClick={() => handleClick(cat.name)}
+            className="text-sm bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
           >
-            <Image
-              src={cat.image}
-              alt={cat.name}
-              className="w-304 h-60 object-contain mb-4"
-            />
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">{cat.name}</h3>
-            <button
-              onClick={() => handleClick(cat.name)}
-              className="text-sm bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-            >
-              Explore
-            </button>
-          </div>
-        ))}
-      </div>
+            Explore
+          </button>
+        </div>
+      ))}
     </div>
-  );
+  </div>
+);
+
 }

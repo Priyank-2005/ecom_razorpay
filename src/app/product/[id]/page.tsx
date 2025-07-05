@@ -2,6 +2,7 @@
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import { useParams } from 'next/navigation';
+import { useCart } from '@/context/CartContext';
 
 const products = [
   {
@@ -149,6 +150,7 @@ const products = [
 export default function ProductPage() {
   const { id } = useParams();
   const product = products.find((p) => p.id === id);
+  const { addToCart } = useCart();
 
   if (!product) {
     return <div className="p-10 text-center">Product not found</div>;
@@ -204,7 +206,18 @@ export default function ProductPage() {
                   Buy Now
                 </button>
               </form>
-              <button className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg">
+              <button
+                onClick={() =>
+                  addToCart({
+                    id: product.id,
+                    title: product.title,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1,
+                  })
+                }
+                className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition"
+              >
                 Add to Cart
               </button>
             </div>

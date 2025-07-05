@@ -87,8 +87,13 @@ export default function CheckoutPage() {
                 theme: { color: '#6366F1' },
             };
 
-            const rzp = new ((window as unknown) as RazorpayWindow).Razorpay(options);
-            rzp.open();
+            if (typeof window !== 'undefined' && (window as any).Razorpay) {
+                const rzp = new (window as any).Razorpay(options);
+                rzp.open();
+            } else {
+                alert('Payment SDK failed to load. Please refresh and try again.');
+            }
+
         } catch (err) {
             console.error('Order error:', err);
             alert('Failed to create order. Please try again.');
