@@ -1,7 +1,4 @@
-'use client';
-import React from 'react';
-import { useCart } from '@/context/CartContext';
-import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 
 const products = [
@@ -147,112 +144,103 @@ const products = [
   }
 ];
 
+
 interface ProductDetailProps {
   params: { id: string };
 }
 
 export default function ProductDetail({ params }: ProductDetailProps) {
-  const { addToCart } = useCart();
-  const router = useRouter();
-
   const product = products.find((item) => item.id === params.id);
 
   if (!product) return <div className="p-10 text-center">Product not found.</div>;
 
   return (
-    
-    <div className="bg-white mx-auto p-6">
-            <Navbar />
-
-      <div className="flex flex-col md:flex-row gap-8">
-        <div className="w-full md:w-1/2">
-          <img
-            src={product.image}
-            alt={product.title}
-            className="rounded-xl shadow-md w-100"
-          />
-        </div>
-
-        <div className="w-full md:w-1/2 space-y-4">
-          <h1 className="text-gray-800 text-2xl font-bold">{product.title}</h1>
-          <p className="text-sm text-gray-600">by {product.brand}</p>
-          <div className="flex items-center gap-2 text-yellow-500 font-semibold">
-            ★ {product.rating}{' '}
-            <span className="text-gray-500">({product.reviews} reviews)</span>
+    <>
+      <Navbar />
+      <div className="bg-white mx-auto p-6 max-w-7xl">
+        <div className="flex flex-col md:flex-row gap-8">
+          <div className="w-full md:w-1/2">
+            <Image
+              src={product.image}
+              alt={product.title}
+              width={500}
+              height={500}
+              className="rounded-xl shadow-md w-full h-auto object-contain"
+            />
           </div>
 
-          <div className="text-xl font-bold text-green-600">
-            ₹{product.price.toLocaleString()}
-          </div>
-          <div className="text-sm text-gray-500 line-through">
-            M.R.P: ₹{product.mrp.toLocaleString()}
-          </div>
-          <div className="text-sm text-blue-600">
-            You save ₹{(product.mrp - product.price).toLocaleString()} (
-            {Math.round(((product.mrp - product.price) / product.mrp) * 100)}%
-            off)
-          </div>
+          <div className="w-full md:w-1/2 space-y-4">
+            <h1 className="text-gray-800 text-2xl font-bold">{product.title}</h1>
+            <p className="text-sm text-gray-600">by {product.brand}</p>
+            <div className="flex items-center gap-2 text-yellow-500 font-semibold">
+              ★ {product.rating} <span className="text-gray-500">({product.reviews} reviews)</span>
+            </div>
 
-          <div className="bg-yellow-50 p-4 rounded-md text-sm border">
-            <p className="text-gray-700 font-semibold mb-1">Available Offers:</p>
-            <ul className="text-gray-600 list-disc pl-5 space-y-1">
-              {product.offers.map((offer, i) => (
-                <li key={i}>{offer}</li>
-              ))}
-            </ul>
-          </div>
+            <div className="text-xl font-bold text-green-600">
+              ₹{product.price.toLocaleString()}
+            </div>
+            <div className="text-sm text-gray-500 line-through">
+              M.R.P: ₹{product.mrp.toLocaleString()}
+            </div>
+            <div className="text-sm text-blue-600">
+              You save ₹{(product.mrp - product.price).toLocaleString()} ({Math.round(((product.mrp - product.price) / product.mrp) * 100)}% off)
+            </div>
 
-          <div className="flex gap-4 mt-4">
-            <button
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg"
-              onClick={() => {
-                addToCart({ ...product, quantity: 1 });
-                router.push('/checkout');
-              }}
-            >
-              Buy Now
-            </button>
-            <button
-              className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg"
-              onClick={() => addToCart({ ...product, quantity: 1 })}
-            >
-              Add to Cart
-            </button>
+            <div className="bg-yellow-50 p-4 rounded-md text-sm border">
+              <p className="text-gray-700 font-semibold mb-1">Available Offers:</p>
+              <ul className="text-gray-600 list-disc pl-5 space-y-1">
+                {product.offers.map((offer, i) => (
+                  <li key={i}>{offer}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex gap-4 mt-4">
+              <form action="/checkout">
+                <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded-lg">
+                  Buy Now
+                </button>
+              </form>
+              {/* Add to Cart should be Client Component — use separate component if needed */}
+              <button className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg">
+                Add to Cart
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="mt-10">
-        <h2 className="text-gray-700 text-xl font-semibold mb-2">Highlights</h2>
-        <ul className="list-disc pl-5 space-y-1 text-gray-600">
-          {product.highlights.map((item, i) => (
-            <li key={i}>{item}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="mt-8">
-        <h2 className="text-gray-700 text-xl font-semibold mb-2">About this item</h2>
-        <ul className="list-disc pl-5 space-y-1 text-gray-600">
-          {product.about.map((line, i) => (
-            <li key={i}>{line}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="mt-8">
-        <h2 className="text-gray-700 text-xl font-semibold mb-2">Technical Details</h2>
-        <table className="w-full text-sm text-left border border-gray-300">
-          <tbody>
-            {Object.entries(product.specs).map(([key, value]) => (
-              <tr key={key} className="even:bg-gray-50">
-                <td className="text-gray-600 p-2 font-medium border">{key}</td>
-                <td className="text-gray-600 p-2 border">{value}</td>
-              </tr>
+        <div className="mt-10">
+          <h2 className="text-gray-700 text-xl font-semibold mb-2">Highlights</h2>
+          <ul className="list-disc pl-5 space-y-1 text-gray-600">
+            {product.highlights.map((item, i) => (
+              <li key={i}>{item}</li>
             ))}
-          </tbody>
-        </table>
+          </ul>
+        </div>
+
+        <div className="mt-8">
+          <h2 className="text-gray-700 text-xl font-semibold mb-2">About this item</h2>
+          <ul className="list-disc pl-5 space-y-1 text-gray-600">
+            {product.about.map((line, i) => (
+              <li key={i}>{line}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-8">
+          <h2 className="text-gray-700 text-xl font-semibold mb-2">Technical Details</h2>
+          <table className="w-full text-sm text-left border border-gray-300">
+            <tbody>
+              {Object.entries(product.specs).map(([key, value]) => (
+                <tr key={key} className="even:bg-gray-50">
+                  <td className="text-gray-600 p-2 font-medium border">{key}</td>
+                  <td className="text-gray-600 p-2 border">{value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
