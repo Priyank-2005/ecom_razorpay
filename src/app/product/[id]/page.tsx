@@ -95,60 +95,64 @@ const products = [
     },
   },
   {
-  id: '3',
-  title: 'Samsung Galaxy Z Fold6 5G (12GB RAM, 512GB Storage) – Phantom Black',
-  price: 164999,
-  mrp: 179999,
-  rating: 4.6,
-  reviews: 2150,
-  image: 'phone.png',
-  brand: 'Samsung',
-  color: 'Phantom Black',
-  highlights: [
-    '7.6” Main QXGA+ Dynamic AMOLED 2X Display',
-    '6.3” Cover FHD+ Display',
-    'Snapdragon 8 Gen 3 Mobile Platform',
-    '12GB RAM + 512GB Internal Storage',
-    'Triple Rear Camera: 50MP + 12MP + 10MP',
-    '4400mAh Battery with Super Fast Charging',
-    'IPX8 Water Resistance',
-    'Samsung Knox & S Pen support (sold separately)',
-  ],
-  offers: [
-    '₹15,000 Instant Bank Discount on ICICI/Axis Cards',
-    'Free Galaxy Buds3 Pro on Pre-book',
-    'Up to ₹12,000 exchange bonus',
-  ],
-  about: [
-    'Redesigned with a slimmer hinge and lighter body for better portability.',
-    'Enhanced Flex Mode and multitasking features for power users.',
-    'Built with Armor Aluminum frame and Gorilla Glass Victus 2 for protection.',
-    '5G capable for ultra-fast speeds and low latency.',
-    'Samsung DeX and Knox security for business use.',
-  ],
-  specs: {
-    'Brand': 'Samsung',
-    'Model': 'Galaxy Z Fold6',
-    'Display (Main)': '7.6" QXGA+ AMOLED 2X, 120Hz',
-    'Display (Cover)': '6.3" FHD+ AMOLED, 120Hz',
-    'Processor': 'Snapdragon 8 Gen 3',
-    'RAM': '12GB',
-    'Storage': '512GB',
-    'Rear Camera': '50MP + 12MP + 10MP',
-    'Front Camera': '10MP + 4MP (under display)',
-    'Battery': '4400mAh, 25W Fast Charging',
-    'OS': 'Android 14, One UI 7.0',
-    'Weight': '239g',
-    'Water Resistance': 'IPX8',
-    'Color': 'Phantom Black',
-  },
+    id: '3',
+    title: 'Samsung Galaxy Z Fold6 5G (12GB RAM, 512GB Storage) – Phantom Black',
+    price: 164999,
+    mrp: 179999,
+    rating: 4.6,
+    reviews: 2150,
+    image: 'phone.png',
+    brand: 'Samsung',
+    color: 'Phantom Black',
+    highlights: [
+      '7.6” Main QXGA+ Dynamic AMOLED 2X Display',
+      '6.3” Cover FHD+ Display',
+      'Snapdragon 8 Gen 3 Mobile Platform',
+      '12GB RAM + 512GB Internal Storage',
+      'Triple Rear Camera: 50MP + 12MP + 10MP',
+      '4400mAh Battery with Super Fast Charging',
+      'IPX8 Water Resistance',
+      'Samsung Knox & S Pen support (sold separately)',
+    ],
+    offers: [
+      '₹15,000 Instant Bank Discount on ICICI/Axis Cards',
+      'Free Galaxy Buds3 Pro on Pre-book',
+      'Up to ₹12,000 exchange bonus',
+    ],
+    about: [
+      'Redesigned with a slimmer hinge and lighter body for better portability.',
+      'Enhanced Flex Mode and multitasking features for power users.',
+      'Built with Armor Aluminum frame and Gorilla Glass Victus 2 for protection.',
+      '5G capable for ultra-fast speeds and low latency.',
+      'Samsung DeX and Knox security for business use.',
+    ],
+    specs: {
+      'Brand': 'Samsung',
+      'Model': 'Galaxy Z Fold6',
+      'Display (Main)': '7.6" QXGA+ AMOLED 2X, 120Hz',
+      'Display (Cover)': '6.3" FHD+ AMOLED, 120Hz',
+      'Processor': 'Snapdragon 8 Gen 3',
+      'RAM': '12GB',
+      'Storage': '512GB',
+      'Rear Camera': '50MP + 12MP + 10MP',
+      'Front Camera': '10MP + 4MP (under display)',
+      'Battery': '4400mAh, 25W Fast Charging',
+      'OS': 'Android 14, One UI 7.0',
+      'Weight': '239g',
+      'Water Resistance': 'IPX8',
+      'Color': 'Phantom Black',
+    },
   }
 ];
 
-export default function ProductDetail({ params }: { params: { id: string } }) {
+export default function ProductDetail({
+  params,
+}: {
+  params: { id: string };
+}) {
   const product = products.find((p) => p.id === params.id);
 
-  if (!product) return notFound(); // better than manual error message
+  if (!product) return notFound();
 
   return (
     <>
