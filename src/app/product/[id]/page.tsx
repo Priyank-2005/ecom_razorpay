@@ -1,159 +1,258 @@
 'use client';
-import { useParams } from 'next/navigation';
-import Image from 'next/image';
+import React from 'react';
+import { useCart } from '@/context/CartContext';
+import { useRouter } from 'next/navigation';
+import Navbar from '@/components/Navbar';
 
-const product = {
-  id: 'headphones-001',
-  title: 'Noise 3 Wireless Headphone',
-  rating: 4.3,
-  reviewsCount: 80,
-  colors: ['Midnight Blue', 'Carbon Black', 'Jet Black', 'Chocolate Brown', 'Dark Brown', 'Space Blue'],
-  typicalPrice: '₹1,648–₹1,999',
-  bestPrice: '₹1,614',
-  discount: '19% off',
-  mrp: '₹1,999',
-  brand: 'Noise',
-  image: '/product.webp',
-  description: `Noise Three Wireless Headphones, Up To 70 hours of playtime, Dual Pairing, Gaming Mode, Low Latency (Up to 45ms), Foldable Design, Carbon Black`,
-  availability: 'In stock online',
-  delivery: 'Free delivery 11–16 Jul',
-  offer: 'Rs 385 off on Airwave Max 3',
-  shops: [
-    {
-      name: 'Vijay Sales',
-      price: '₹1,799',
-      stock: 'In stock online and nearby, 10.9 km',
-      delivery: 'Free next-day delivery'
+const products = [
+  {
+    id: '1',
+    title: 'Noise Airwave Max 3 Bluetooth On-Ear Headphones',
+    price: 1999,
+    mrp: 5499,
+    rating: 3.9,
+    reviews: 2051,
+    image: '/product.webp',
+    brand: 'Noise',
+    color: 'Carbon Black',
+    highlights: [
+      '70H Playtime',
+      '40mm Driver',
+      'Low Latency: 45ms',
+      'Dual Pairing',
+      'Bluetooth v5.3',
+      'On-Ear Design',
+      'Water Resistant',
+      '3.5mm AUX Support',
+    ],
+    offers: [
+      'Up to ₹1,500 discount with HDFC, ICICI cards',
+      'No Cost EMI from ₹98/month',
+      'Cashback up to ₹59 via Amazon Pay ICICI card',
+    ],
+    about: [
+      'Enjoy music for days without charging with a massive 70-hour battery life.',
+      'Dual Pairing feature lets you stay connected to two devices simultaneously.',
+      'Gaming Mode with low latency of 45ms ensures lag-free experience.',
+      '40mm dynamic drivers deliver rich bass and crisp treble.',
+      'Comfortable lightweight build ideal for long listening sessions.',
+    ],
+    specs: {
+      'Brand': 'Noise',
+      'Model Name': 'Noise 3',
+      'Form Factor': 'On Ear',
+      'Connectivity': 'Bluetooth v5.3 & AUX',
+      'Driver Size': '40mm',
+      'Battery Life': '70 Hours',
+      'Charging Time': '1.5 hours',
+      'Latency': '45ms',
+      'Weight': '50g',
+      'Color': 'Carbon Black',
+      'Water Resistance': 'Yes',
     },
-    {
-      name: 'Amazon.in',
-      price: '₹1,999',
-      stock: 'In stock online',
-      delivery: 'Free delivery'
-    }
+  },
+  {
+    id: '2',
+    title: 'Amazon Echo Dot (3rd Gen) – Smart speaker with Alexa (Black)',
+    price: 1999,
+    mrp: 4499,
+    rating: 4.4,
+    reviews: 310000,
+    image: '/echo.png',
+    brand: 'Amazon',
+    color: 'Black',
+    highlights: [
+      'Smart voice assistant with Alexa',
+      'Rich, loud sound with improved bass',
+      'Voice control for music, smart home, and more',
+      'Stream songs from Amazon Music, Spotify, JioSaavn, etc.',
+      'Compatible with smart lights, plugs, ACs and more',
+      'Far-field voice recognition',
+    ],
+    offers: [
+      'Flat ₹2,500 discount on M.R.P.',
+      'No Cost EMI available',
+      'Free smart bulb with bundle offer (select variants)',
+    ],
+    about: [
+      'Echo Dot is a smart speaker that can be operated by voice – even from a distance.',
+      'Alexa can speak English and Hindi.',
+      'Use Echo Dot as a Bluetooth speaker by pairing your phone.',
+      'Alexa can play music, answer questions, read the news, check the weather, set alarms, control compatible smart home devices and more.',
+      'Stream millions of songs from Amazon Prime Music, Spotify, JioSaavn, Gaana, and Apple Music.',
+    ],
+    specs: {
+      'Brand': 'Amazon',
+      'Model': 'Echo Dot 3rd Gen',
+      'Speaker Size': '1.6”',
+      'Microphones': '4 far-field mics',
+      'Connectivity': 'Wi-Fi, Bluetooth',
+      'Voice Assistant': 'Alexa',
+      'Audio Output': '3.5mm jack & Bluetooth',
+      'Dimensions': '99 x 99 x 43 mm',
+      'Weight': '300g',
+      'Color': 'Black',
+      'Power': '15W power adapter included',
+      'Country of Origin': 'China',
+    },
+  },
+  {
+  id: '3',
+  title: 'Samsung Galaxy Z Fold6 5G (12GB RAM, 512GB Storage) – Phantom Black',
+  price: 164999,
+  mrp: 179999,
+  rating: 4.6,
+  reviews: 2150,
+  image: 'phone.png',
+  brand: 'Samsung',
+  color: 'Phantom Black',
+  highlights: [
+    '7.6” Main QXGA+ Dynamic AMOLED 2X Display',
+    '6.3” Cover FHD+ Display',
+    'Snapdragon 8 Gen 3 Mobile Platform',
+    '12GB RAM + 512GB Internal Storage',
+    'Triple Rear Camera: 50MP + 12MP + 10MP',
+    '4400mAh Battery with Super Fast Charging',
+    'IPX8 Water Resistance',
+    'Samsung Knox & S Pen support (sold separately)',
+  ],
+  offers: [
+    '₹15,000 Instant Bank Discount on ICICI/Axis Cards',
+    'Free Galaxy Buds3 Pro on Pre-book',
+    'Up to ₹12,000 exchange bonus',
+  ],
+  about: [
+    'Redesigned with a slimmer hinge and lighter body for better portability.',
+    'Enhanced Flex Mode and multitasking features for power users.',
+    'Built with Armor Aluminum frame and Gorilla Glass Victus 2 for protection.',
+    '5G capable for ultra-fast speeds and low latency.',
+    'Samsung DeX and Knox security for business use.',
   ],
   specs: {
-    Mic: 'Yes',
-    WirelessType: 'Bluetooth',
-    BTVersion: '5.3',
-    MaxBatteryLife: '70 Hours',
-    Rechargeable: 'Yes',
-    DriverSize: '40 mm',
-    DriverTech: 'Dynamic',
-    Style: 'On-Ear',
-    CupType: 'Supra-aural',
-    EarcupStyle: 'Closed-back',
-    NoiseCanceling: 'No',
-    SurroundSound: 'No',
-    AssistSupport: 'Yes',
-    ChargingCase: 'No',
-    WaterProt: 'IPX5',
-    OnEar: 'Yes',
-    OverEar: 'No',
-    InEar: 'No',
-    ForGaming: 'Yes',
-    RecommendedUse: 'Music listening, Calls, Gaming',
-    UseWithPhones: 'Yes',
-    OccasionStyle: 'Casual, Travel',
-    TypeOfUsers: 'Casual users'
+    'Brand': 'Samsung',
+    'Model': 'Galaxy Z Fold6',
+    'Display (Main)': '7.6" QXGA+ AMOLED 2X, 120Hz',
+    'Display (Cover)': '6.3" FHD+ AMOLED, 120Hz',
+    'Processor': 'Snapdragon 8 Gen 3',
+    'RAM': '12GB',
+    'Storage': '512GB',
+    'Rear Camera': '50MP + 12MP + 10MP',
+    'Front Camera': '10MP + 4MP (under display)',
+    'Battery': '4400mAh, 25W Fast Charging',
+    'OS': 'Android 14, One UI 7.0',
+    'Weight': '239g',
+    'Water Resistance': 'IPX8',
+    'Color': 'Phantom Black',
   },
-  userReviews: [
-    {
-      user: 'K.s.',
-      rating: 5,
-      time: 'a year ago',
-      summary: 'Noise 3',
-      content: `Sound is fantastic with strong bass. Dual pairing works well. Battery lasts 10 days easily with 4–5 hrs/day usage. Noise should offer an EQ app.`
-    },
-    {
-      user: 'Parmanand',
-      rating: 5,
-      time: '9 months ago',
-      summary: 'Stylish and comfortable',
-      content: `Balanced sound, padded ear cups, and good build. Ideal for daily use and commutes.`
-    },
-    {
-      user: 'Paletooth',
-      rating: 4,
-      time: '9 months ago',
-      summary: 'Use codes to get it at 1699',
-      content: `Cushions are great. May feel ear heat if new. Build quality is good.`
-    }
-  ]
-};
+  }
+];
 
-export default function ProductDetailPage() {
-  const { id } = useParams();
+interface ProductDetailProps {
+  params: { id: string };
+}
 
-  if (id !== product.id) return <div className="p-6 text-center">Product not found.</div>;
+export default function ProductDetail({ params }: ProductDetailProps) {
+  const { addToCart } = useCart();
+  const router = useRouter();
+
+  const product = products.find((item) => item.id === params.id);
+
+  if (!product) return <div className="p-10 text-center">Product not found.</div>;
 
   return (
-    <main className="min-h-screen p-6 bg-gray-100 flex justify-center">
-      <div className="bg-white p-6 rounded-xl shadow max-w-4xl w-full">
-        <div className="flex flex-col md:flex-row gap-6">
-          <Image src="/product.webp" alt={product.title} width={400} height={400} className="rounded-xl" />
-          <div>
-            <h1 className="text-gray-800 text-3xl font-bold mb-1">{product.title}</h1>
-            <p className="text-yellow-600 mb-2">⭐ {product.rating} ({product.reviewsCount} user reviews)</p>
+    
+    <div className="bg-white mx-auto p-6">
+            <Navbar />
 
-            <p className="text-sm text-gray-600 mb-2">Colours:</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {product.colors.map((color) => (
-                <span key={color} className="text-gray-700 px-3 py-1 rounded-full bg-gray-200 text-sm">{color}</span>
+      <div className="flex flex-col md:flex-row gap-8">
+        <div className="w-full md:w-1/2">
+          <img
+            src={product.image}
+            alt={product.title}
+            className="rounded-xl shadow-md w-100"
+          />
+        </div>
+
+        <div className="w-full md:w-1/2 space-y-4">
+          <h1 className="text-gray-800 text-2xl font-bold">{product.title}</h1>
+          <p className="text-sm text-gray-600">by {product.brand}</p>
+          <div className="flex items-center gap-2 text-yellow-500 font-semibold">
+            ★ {product.rating}{' '}
+            <span className="text-gray-500">({product.reviews} reviews)</span>
+          </div>
+
+          <div className="text-xl font-bold text-green-600">
+            ₹{product.price.toLocaleString()}
+          </div>
+          <div className="text-sm text-gray-500 line-through">
+            M.R.P: ₹{product.mrp.toLocaleString()}
+          </div>
+          <div className="text-sm text-blue-600">
+            You save ₹{(product.mrp - product.price).toLocaleString()} (
+            {Math.round(((product.mrp - product.price) / product.mrp) * 100)}%
+            off)
+          </div>
+
+          <div className="bg-yellow-50 p-4 rounded-md text-sm border">
+            <p className="text-gray-700 font-semibold mb-1">Available Offers:</p>
+            <ul className="text-gray-600 list-disc pl-5 space-y-1">
+              {product.offers.map((offer, i) => (
+                <li key={i}>{offer}</li>
               ))}
-            </div>
-
-            <p className="text-sm text-gray-500 mb-1">Typically {product.typicalPrice}</p>
-            <p className="text-2xl font-bold text-green-700 mb-2">{product.bestPrice} <span className="text-sm text-red-500 ml-2">{product.discount}</span></p>
-            <p className="text-sm line-through text-gray-400 mb-4">MRP {product.mrp}</p>
-
-            <p className="text-gray-700 mb-3">{product.description}</p>
-            <p className="text-sm text-gray-500 mb-1">Availability: {product.availability}</p>
-            <p className="text-sm text-gray-500 mb-4">Delivery: {product.delivery}</p>
-
-            <p className="text-sm text-blue-500 mb-4">{product.offer}</p>
+            </ul>
           </div>
-        </div>
 
-        <div className="mt-8">
-          <h2 className="text-gray-700 text-xl font-semibold mb-2">Buy from:</h2>
-          <ul className="space-y-2">
-            {product.shops.map((shop) => (
-              <li key={shop.name} className="text-gray-600 border p-4 rounded-lg">
-                <p className="font-semibold">{shop.name}</p>
-                <p>{shop.price}</p>
-                <p className="text-sm text-gray-600">{shop.stock}</p>
-                <p className="text-sm text-gray-500">{shop.delivery}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="mt-8">
-          <h2 className="text-gray-700 text-xl font-semibold mb-2">Specifications:</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm text-gray-700">
-            {Object.entries(product.specs).map(([key, value]) => (
-              <div key={key} className="bg-gray-50 p-2 rounded">
-                <strong>{key.replace(/([A-Z])/g, ' $1')}: </strong>{value}
-              </div>
-            ))}
+          <div className="flex gap-4 mt-4">
+            <button
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg"
+              onClick={() => {
+                addToCart({ ...product, quantity: 1 });
+                router.push('/checkout');
+              }}
+            >
+              Buy Now
+            </button>
+            <button
+              className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg"
+              onClick={() => addToCart({ ...product, quantity: 1 })}
+            >
+              Add to Cart
+            </button>
           </div>
-        </div>
-
-        <div className="mt-8">
-          <h2 className="text-gray-700 text-xl font-semibold mb-2">User Reviews:</h2>
-          <ul className="space-y-4">
-            {product.userReviews.map((review, index) => (
-              <li key={index} className="border p-4 rounded-lg bg-gray-50">
-                <p className="text-gray-600 font-semibold">{review.user} – ⭐ {review.rating}</p>
-                <p className="text-sm text-gray-500 mb-1">{review.time}</p>
-                <p className="text-gray-500 font-medium">{review.summary}</p>
-                <p className="text-gray-700 text-sm mt-1">{review.content}</p>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
-    </main>
+
+      <div className="mt-10">
+        <h2 className="text-gray-700 text-xl font-semibold mb-2">Highlights</h2>
+        <ul className="list-disc pl-5 space-y-1 text-gray-600">
+          {product.highlights.map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mt-8">
+        <h2 className="text-gray-700 text-xl font-semibold mb-2">About this item</h2>
+        <ul className="list-disc pl-5 space-y-1 text-gray-600">
+          {product.about.map((line, i) => (
+            <li key={i}>{line}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mt-8">
+        <h2 className="text-gray-700 text-xl font-semibold mb-2">Technical Details</h2>
+        <table className="w-full text-sm text-left border border-gray-300">
+          <tbody>
+            {Object.entries(product.specs).map(([key, value]) => (
+              <tr key={key} className="even:bg-gray-50">
+                <td className="text-gray-600 p-2 font-medium border">{key}</td>
+                <td className="text-gray-600 p-2 border">{value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }

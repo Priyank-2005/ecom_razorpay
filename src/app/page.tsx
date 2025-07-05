@@ -1,17 +1,24 @@
 import Navbar from '@/components/Navbar';
-import ProductCard from '@/components/ProductCard';
+import CategorySlider from '../components/CategorySlider';
+import ProductGrid from '../components/ProductGrid';
+import HeroBanner from '../components/HeroBanner';
 
 export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 flex items-center justify-center px-4">
-        <div className="max-w-4xl w-full">
-          <h1 className="text-gray-800 text-4xl font-bold text-center mb-10">
-            Welcome to Our Product Store
-          </h1>
-          <ProductCard />
-        </div>
+      <main className="bg-gray-100 min-h-screen">
+        <HeroBanner />
+
+        <section className="max-w-7xl mx-auto px-4 py-6">
+          <h2 className="text-2xl text-gray-800 font-bold mb-4">Shop by Category</h2>
+          <CategorySlider />
+        </section>
+
+        <section className="max-w-7xl mx-auto px-4 py-6">
+          <h2 className="text-gray-800 text-2xl font-bold mb-4">Top Deals</h2>
+          <ProductGrid />
+        </section>
       </main>
     </>
   );
