@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
-import { notFound } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 const products = [
   {
@@ -145,14 +145,13 @@ const products = [
   }
 ];
 
-interface PageProps {
-  params: { id: string };
-}
+export default function ProductPage() {
+  const { id } = useParams();
+  const product = products.find((p) => p.id === id);
 
-export default async function ProductDetail({ params }: PageProps) {
-  const product = products.find((p) => p.id === params.id);
-
-  if (!product) return notFound();
+  if (!product) {
+    return <div className="p-10 text-center">Product not found</div>;
+  }
 
   return (
     <>
