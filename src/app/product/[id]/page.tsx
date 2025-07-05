@@ -145,10 +145,16 @@ const products = [
 ];
 
 
-export default function ProductDetail({ params }: { params: { id: string } }) {
+interface Props {
+  params: { id: string };
+}
+
+export default function ProductDetail({ params }: Props) {
   const product = products.find((p) => p.id === params.id);
 
-  if (!product) return <div className="p-10 text-center">Product not found</div>;
+  if (!product) {
+    return <div className="p-10 text-center">Product not found.</div>;
+  }
 
   return (
     <>
