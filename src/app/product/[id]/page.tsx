@@ -149,7 +149,7 @@ interface Props {
   params: { id: string };
 }
 
-export default function ProductDetail({ params }: Props) {
+export default async function ProductDetail({ params }: Props) {
   const product = products.find((p) => p.id === params.id);
 
   if (!product) {
@@ -175,7 +175,8 @@ export default function ProductDetail({ params }: Props) {
             <h1 className="text-gray-800 text-2xl font-bold">{product.title}</h1>
             <p className="text-sm text-gray-600">by {product.brand}</p>
             <div className="flex items-center gap-2 text-yellow-500 font-semibold">
-              ★ {product.rating} <span className="text-gray-500">({product.reviews} reviews)</span>
+              ★ {product.rating}{' '}
+              <span className="text-gray-500">({product.reviews} reviews)</span>
             </div>
 
             <div className="text-xl font-bold text-green-600">
@@ -185,7 +186,9 @@ export default function ProductDetail({ params }: Props) {
               M.R.P: ₹{product.mrp.toLocaleString()}
             </div>
             <div className="text-sm text-blue-600">
-              You save ₹{(product.mrp - product.price).toLocaleString()} ({Math.round(((product.mrp - product.price) / product.mrp) * 100)}% off)
+              You save ₹
+              {(product.mrp - product.price).toLocaleString()} (
+              {Math.round(((product.mrp - product.price) / product.mrp) * 100)}% off)
             </div>
 
             <div className="bg-yellow-50 p-4 rounded-md text-sm border">
@@ -203,7 +206,6 @@ export default function ProductDetail({ params }: Props) {
                   Buy Now
                 </button>
               </form>
-              {/* Add to Cart should be Client Component — use separate component if needed */}
               <button className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg">
                 Add to Cart
               </button>
