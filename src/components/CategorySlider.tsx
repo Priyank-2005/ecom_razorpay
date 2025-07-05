@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 
 const categories = [
   { name: 'Electronics', image: '/electronics.png' },
@@ -25,7 +26,7 @@ export default function CategorySlider() {
             key={i}
             className="bg-white w-full border rounded-xl shadow-md flex flex-col items-center p-4 hover:shadow-lg transition"
           >
-            <img
+            <Image
               src={cat.image}
               alt={cat.name}
               className="w-304 h-60 object-contain mb-4"

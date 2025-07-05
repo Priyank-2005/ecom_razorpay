@@ -145,14 +145,10 @@ const products = [
 ];
 
 
-interface ProductDetailProps {
-  params: { id: string };
-}
+export default function ProductDetail({ params }: { params: { id: string } }) {
+  const product = products.find((p) => p.id === params.id);
 
-export default function ProductDetail({ params }: ProductDetailProps) {
-  const product = products.find((item) => item.id === params.id);
-
-  if (!product) return <div className="p-10 text-center">Product not found.</div>;
+  if (!product) return <div className="p-10 text-center">Product not found</div>;
 
   return (
     <>
